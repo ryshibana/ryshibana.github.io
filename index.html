@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="renderer" content="webkit">
+<title>中医健康管理技术模拟练习题</title>
+<script src="js/jquery-3.3.1.min.js"></script>
+<script src="js/questions.json"></script>
+<link rel="stylesheet" type="text/css" href="css/style.css">
+<style type="text/css">
+  .searcher {
+   background: rgba(255, 255, 255, 0);
+   width: 100%;
+   text-align: center;
+   font-size: 16px;
+ }
+ .searcher-main {
+   background: #F4F4F4;
+   border-radius: 4px;
+   line-height: 20px;
+ }
+
+ .searcher-text {
+   width: 80%;
+   text-align: center;
+   border: none;
+   outline: none;
+   line-height: 3em;
+   background: #F4F4F4;
+
+ }
+
+ .searcher-cancel {
+   width: 10%;
+   height: 20px;
+   line-height: 20px;
+   color: #929292;
+   top: 5px;
+ }
+ .searcher-result {
+  width: 80%;
+  margin-left: auto;
+  margin-right: auto;
+  overflow-y: auto;
+  margin-top: 125px;
+}
+</style>
+<!--[if IE]>
+		
+		<style type="text/css">			
+			li.purchase a {
+				padding-top: 5px;
+				background-position: 0px -4px;
+			}
+			
+			li.remove_frame a {
+				padding-top: 5px;
+				background-position: 0px -3px;
+			}						
+		</style>
+		
+    <![endif]-->
+    <body>
+      <div class="allcontainer">
+        <div class="note">
+          <div class="title">
+            <div id="menu_button">
+              <h1>中医健康管理技术模拟练习题</h1>
+              <div id="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+              </div>
+            </div>
+          </div>
+          <p>
+            <center>查询结束后按回车键可清除查询内容</center>
+          </p>
+          
+
+          <div class="searcher">
+            <p class="searcher-main">
+             <input class="searcher-text" placeholder="输入题干或选项中的文字或拼音"></input>
+           </p>
+           <p>
+            <center><input type="button" value="清除" style="display: block; width: 100%" onclick="$('.searcher-text').val('')">  </center>
+          </p>
+         </div>
+       </div>
+       <div class="searcher-result">
+       </div>
+     </div>
+     <script>
+      
+      var searchContent;
+      var resultContent;
+      var result = new Array();
+
+      $('.searcher-text').on('input', function() {
+        initSearchList();
+      });
+      function initSearchList() {
+        resultContent = "";
+        result = new Array();
+        searchContent = replaceIllegalStr($('.searcher-text').val());
+        for(var i=0; i<examJson.length; i++){
+          for(var key in examJson[i]){
+           if(examJson[i][key].indexOf(searchContent)!=-1){
+            result.push(i)
+          }
+        }
+      }
+      result =uniq(result);
+      for(var j=0;j<result.length;j++){
+        var i = result[j];
+        console.log(i);
+        if(typeof(examJson[i]["question"])!= "undefined"){
+          resultContent = resultContent + "<p>" + examJson[i]["question"] + "</p>";
+        }
+        if(typeof(examJson[i]["anwser1"])!= "undefined"){
+          if(examJson[i]["answer"].indexOf(0) != -1){
+            resultContent = resultContent + "<p>&nbsp&nbsp&nbsp&nbsp<b>✔" + examJson[i]["anwser1"] + "</b></p>";
+          }else{
+            resultContent = resultContent + "<p>&nbsp&nbsp&nbsp&nbsp" + examJson[i]["anwser1"] + "</p>";
+          }
+        }
+        if(typeof(examJson[i]["anwser2"])!= "undefined"){
+          if(examJson[i]["answer"].indexOf(1) != -1){
+            resultContent = resultContent + "<p>&nbsp&nbsp&nbsp&nbsp<b>✔" + examJson[i]["anwser2"] + "</b></p>";
+          }else{
+            resultContent = resultContent + "<p>&nbsp&nbsp&nbsp&nbsp" + examJson[i]["anwser2"] + "</p>";
+          }
+        }
+        if(typeof(examJson[i]["anwser3"])!= "undefined"){
+          if(examJson[i]["answer"].indexOf(2) != -1){
+            resultContent = resultContent + "<p>&nbsp&nbsp&nbsp&nbsp<b>✔" + examJson[i]["anwser3"] + "</b></p>";
+          }else{
+            resultContent = resultContent + "<p>&nbsp&nbsp&nbsp&nbsp" + examJson[i]["anwser3"] + "</p>";
+          }
+        }
+        if(typeof(examJson[i]["anwser4"])!= "undefined"){
+          if(examJson[i]["answer"].indexOf(3) != -1){
+            resultContent = resultContent + "<p>&nbsp&nbsp&nbsp&nbsp<b>✔" + examJson[i]["anwser4"] + "</b></p>";
+          }else{
+            resultContent = resultContent + "<p>&nbsp&nbsp&nbsp&nbsp" + examJson[i]["anwser4"] + "</p>";
+          }
+        }
+        if(typeof(examJson[i]["anwser5"])!= "undefined"){
+          if(examJson[i]["answer"].indexOf(4) != -1){
+            resultContent = resultContent + "<p>&nbsp&nbsp&nbsp&nbsp<b>✔" + examJson[i]["anwser5"] + "</b></p>";
+          }else{
+            resultContent = resultContent + "<p>&nbsp&nbsp&nbsp&nbsp" + examJson[i]["anwser5"] + "</p>";
+          }
+        }
+        resultContent = resultContent + "</br>";
+      }
+      $('.searcher-result').empty();
+      $('.searcher-result').html(resultContent);
+    }
+    function uniq(array){
+      var temp = [];
+      for(var i = 0; i < array.length; i++){
+        if(temp.indexOf(array[i]) == -1){
+          temp.push(array[i]);
+        }
+      }
+      return temp;
+    }
+    function replaceIllegalStr(str) {
+     var reg;
+     var illegal_list = ["/", "\\",
+     "[", "]",
+     "{", "}",
+     "<", ">",
+     "＜", "＞",
+     "「", "」",
+     "：", "；",
+     "、", "•",
+     "^", "'", "\"",
+     "\r", "\r\n", "\\n", "\n"];
+     for (var i = 0; i < illegal_list.length; i++) {
+      if (str.indexOf(illegal_list[i]) >= 0) {
+       if (illegal_list[i] == '\\' || illegal_list[i] == '[') {
+        reg = new RegExp('\\' + illegal_list[i], "g");
+      } else {
+        reg = new RegExp(illegal_list[i], "g");
+      }
+      str = str.replace(reg, '');
+    }
+  }
+  return str.trim();
+}
+$(document).keyup(function(event){
+  if(event.keyCode ==13){
+    $('.searcher-text').val("");
+  }
+});
+</script> 
+<p class="law">
+  内容均来自网络或自行测试得出，如有侵权，立即删除
+  <script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? "https://" : "http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1278253798'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "v1.cnzz.com/z_stat.php%3Fid%3D1278253798%26show%3Dpic1' type='text/javascript'%3E%3C/script%3E"));</script>
+</p>
+</body>
+</html>
